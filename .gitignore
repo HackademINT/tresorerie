@@ -1,4 +1,4 @@
 __pycache__
 */__pycache__
-API/tresorerie.db
-API/config.py
+*/*.db
+*/config.py
