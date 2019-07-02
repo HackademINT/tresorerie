@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block main %}
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">Accueil</a>
+          </li>
+          <li class="breadcrumb-item active">Remboursement</li>
+        </ol>
+
+        <!-- DataTables Example -->
+        <div class="card mb-3"> 
+          <div class="card-header">
+            <i class="fas fa-cash-register"></i>
+            Remboursement</div>
+          <div class="card-body">
+            Pour rembourser tes dettes, envoie la thune sur le compte de Thomas 
+            dont le RIB se trouve ci-dessous: <br/>
+            <img src="/static/images/rib-thomas.jpeg" alt="rib-thomas"
+                                                        width="60%">
+          </div>
+          <div class="card-footer"></div>
+        
+        
+        <!--
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-list"></i>
+            Opérations détaillées</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Evènement</th>
+                    <th>Montant</th>
+                    <th>Description</th>
+                    <th>Payé</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for t in Transactions %}
+                  <tr>
+                    <td>
+                      <a href='/event/{{ t.id_event }}'>{{ t.nom_event }}</a>
+                    </td>
+                    <td>{{ t.montant }}</td>
+                    <td>{{ t.description }}</td>
+                    <td style='padding: 6px;'>
+                      <a href="/update_user_transaction/{{ id_user }}/{{ t.id }}" 
+                         class="btn btn-{{ 'success' if t.etat else 'danger' }} btn-xs active" 
+                         style='width: 100%; padding: 4px; font-size: 0.9rem' role="button" aria-pressed="true">
+                        {{ 'OUI' if t.etat else 'NON' }}
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted"></div>
+        </div>
+        -->
+
+      </div>
+{% endblock %}

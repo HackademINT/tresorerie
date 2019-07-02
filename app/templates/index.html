@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block main %}
+        
+      <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">Accueil</a>
+          </li>
+        </ol>
+
+        <div class="row">
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-success o-hidden h-100">
+             <div class="card-header">Etat de la trésorerie</div>
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-dollar-sign"></i>
+                </div>
+                <div class="mr-5">{{ total }}€</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-info o-hidden h-100">
+              <div class="card-header">Total d'évènements</div>
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-clipboard-check"></i>
+                </div>
+                <div class="mr-5">{{ total_event }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-warning o-hidden h-100">
+              <div class="card-header">Somme encore impayée</div>
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-cash-register"></i>
+                </div>
+                <div class="mr-5">{{ total_unpaid }}€</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-danger o-hidden h-100">
+              <div class="card-header">Tableau de la honte</div>
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-angry"></i>
+                </div>
+                <div class="mr-5">
+                  {% if not user.fname %}
+                    Tout est en ordre, il n'y a personne à afficher sur le
+                    tableau de la honte (dommage...)
+                  {% else %}
+                    {{ user.fname }} {{ user.lname }} rends
+                    l'argent stp, tu dois {{ user.unpaid }}€ à HackademINT!
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table des evenements -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            Liste des évènements</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Evènement</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for event in events %}
+                  <tr>
+                    <td><a href='/event/{{ event.id }}'>{{ event.name }}</a></td>
+                    <td>{{ event.date }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.total }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted"></div>
+        </div>
+
+        <!-- Table des users -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-users"></i>
+            Liste des users</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Total payé</th>
+                    <th>Total impayé</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                  <tr>
+                    <td><a href='/user/{{ user.id }}'>{{ user.fname }} {{ user.lname }}</a></td>
+                    <td>{{ user.paid|round(2) }}</td>
+                    <td>{{ user.unpaid|round(2) }}</td>
+                    <td>{{ user.total|round(2) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted"></div>
+        </div>
+      
+      </div>
+      <!-- /.container-fluid -->
+{% endblock %}

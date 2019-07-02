@@ -1,0 +1,4 @@
+class Config():
+    SECRET_KEY = 'yoursecretkeyhere'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///LDAPuser.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

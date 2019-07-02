@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block main %}
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">Accueil</a>
+          </li>
+          <li class="breadcrumb-item active">{{ event.name }}</li>
+        </ol>
+
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-list"></i>
+            Opérations détaillées</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Prénom Nom</th>
+                    <th>Description</th>
+                    <th>Montant</th>
+                    <th>Payé</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for t in event.transaction %}
+                  <tr>
+                    <td>
+                      <a href='/user/{{ t.user }}'>{{ t.username }}</a>
+                    </td>
+                    <td>{{ t.description }}</td>
+                    <td>{{ t.sum }}</td>
+                    <td style='padding: 6px;'>
+                      <a href="/update_transaction/event/{{ event.id }}/{{ t.id }}" 
+                         class="btn btn-{{ 'success' if t.paid else 'danger' }} btn-xs active" 
+                         style='width: 100%; padding: 4px; font-size: 0.9rem' role="button" aria-pressed="true">
+                        {{ 'OUI' if t.paid else 'NON' }}
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted"></div>
+        </div>
+
+      </div>
+      <!-- /.container-fluid -->
+{% endblock %}
