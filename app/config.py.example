@@ -1,4 +1,20 @@
+import ldap as l
+
 class Config():
-    SECRET_KEY = 'yoursecretkeyhere'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///LDAPuser.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    LDAP_REALM_NAME = 'Enter your LDAP credentials'
+    LDAP_HOST = 'yourldapdomain.com'
+    LDAP_BASE_DN = 'dc=yourldapdomain,dc=com'
+    LDAP_USERNAME = 'cn=admin,dc=yourldapdomain,dc=com'
+    LDAP_PASSWORD = 'yourpassword'
+
+    LDAP_OBJECTS_DN = 'dn'
+    LDAP_OPENLDAP = True
+    LDAP_USER_OBJECT_FILTER = '(&(objectclass=inetOrgPerson)(cn=%s))'
+
+    LDAP_GROUP_MEMBERS_FIELD = 'uniqueMember'
+    LDAP_GROUP_OBJECT_FILTER = '(&(objectclass=groupOfUniqueNames)(cn=%s))'
+    LDAP_LOGIN_VIEW = 'login'
+    LDAP_GROUP_MEMBER_FILTER = "(&(cn=*)(objectclass=groupOfUniqueNames)(uniqueMember=%s))"
+    LDAP_GROUP_MEMBER_FILTER_FIELD = "cn"
+
+    SECRET_KEY = 'yoursecretkey'
