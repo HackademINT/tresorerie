@@ -3,8 +3,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from marshmallow import Schema, fields, validates, ValidationError
+from marshmallow import Schema, fields
 from config import Config
+
+# Initialization
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -12,6 +14,18 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
+# Initialize user login
+
+class APIuser(db.Model):
+    __tablename__ = 'api_user'
+    id            = db.Column(db.Integer, primary_key=True)
+    username      = db.Column(db.String(100), nullable=False)
+    password      = db.Column(db.String(100), nullable=False)
+    
+    def __repr__(self):
+        return 'APIuser %r' % self.id
+
+# Database SQLAlchemy models
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -50,6 +64,8 @@ class Transaction(db.Model):
     def __repr__(self):
         return '<Transaction %r>' % self.id
 
+
+# Database Marshmallow schemas
 
 class TransactionSchema(ma.ModelSchema):
     class Meta:

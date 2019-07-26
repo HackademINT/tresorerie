@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 import requests
 import json
+from config import headers
+
 
 API_URL = 'http://127.0.0.1:8155'
+
 s = requests.session()
 
 
@@ -21,13 +24,13 @@ def get_stats(transactions):
 # User functions
 
 def get_users():
-    users = json.loads(s.get(f'{API_URL}/user').text)
+    users = json.loads(s.get(f'{API_URL}/user', headers=headers).text)
     for user in users:
         user.update(get_stats(user['transaction']))
     return users
 
 def get_user(id):
-    user = json.loads(s.get(f'{API_URL}/user/{id}').text)
+    user = json.loads(s.get(f'{API_URL}/user/{id}', headers=headers).text)
     user.update(get_stats(user['transaction']))
     return user
 
@@ -44,13 +47,13 @@ def get_user_with_eventname(id):
 # Event functions
 
 def get_events():
-    events = json.loads(s.get(f'{API_URL}/event').text)
+    events = json.loads(s.get(f'{API_URL}/event', headers=headers).text)
     for event in events:
         event.update(get_stats(event['transaction']))
     return events
 
 def get_event(id):
-    event = json.loads(s.get(f'{API_URL}/event/{id}').text)
+    event = json.loads(s.get(f'{API_URL}/event/{id}', headers=headers).text)
     event.update(get_stats(event['transaction']))
     return event
 
@@ -64,30 +67,30 @@ def get_event_with_username(id):
     return event
 
 def count_events():
-    events = json.loads(s.get(f'{API_URL}/event').text)
+    events = json.loads(s.get(f'{API_URL}/event', headers=headers).text)
     return len(events)
 
 
 # Transaction functions
 
 def get_transactions():
-    return json.loads(s.get(f'{API_URL}/transaction').text)
+    return json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
 
 def get_transaction(id):
-    return json.loads(s.get(f'{API_URL}/transaction/{id}').text)
+    return json.loads(s.get(f'{API_URL}/transaction/{id}', headers=headers).text)
 
 # Misc stat functions
 
 def get_total_inflow():
-    transactions = json.loads(s.get(f'{API_URL}/transaction').text)
+    transactions = json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
     return sum([transaction['sum'] for transaction in transactions if transaction['type'] and not transaction['onhold']])
 
 def get_total_outflow():
-    transactions = json.loads(s.get(f'{API_URL}/transaction').text)
+    transactions = json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
     return sum([transaction['sum'] for transaction in transactions if not transaction['type'] and not transaction['onhold']])
 
 def get_total_onhold():
-    transactions = json.loads(s.get(f'{API_URL}/transaction').text)
+    transactions = json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
     return sum([transaction['sum'] for transaction in transactions if transaction['onhold'] and transaction['type']])\
             - sum([transaction['sum'] for transaction in transactions if transaction['onhold'] and not transaction['type']])
 

@@ -1,5 +1,3 @@
-import ldap as l
-
 class Config():
     LDAP_REALM_NAME = 'Enter your LDAP credentials'
     LDAP_HOST = 'yourldapdomain.com'
@@ -18,3 +16,6 @@ class Config():
     LDAP_GROUP_MEMBER_FILTER_FIELD = "cn"
 
     SECRET_KEY = 'yoursecretkey'
+
+token = 'yourJWTtoken'
+headers = {'Authorization': 'JWT ' + token}
