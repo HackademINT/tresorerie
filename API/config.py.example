@@ -2,3 +2,4 @@ class Config():
     SECRET_KEY = 'yoursecretkeyhere'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///yourdatabase.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_EXPIRATION_DELTA = timedelta(seconds=315360000)
