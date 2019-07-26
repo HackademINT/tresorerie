@@ -23,7 +23,8 @@
                     <th>Prénom Nom</th>
                     <th>Description</th>
                     <th>Montant</th>
-                    <th>Payé</th>
+                    <th>Type</th>
+                    <th>Statut</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -34,13 +35,8 @@
                     </td>
                     <td>{{ t.description }}</td>
                     <td>{{ t.sum }}</td>
-                    <td style='padding: 6px;'>
-                      <a href="/update_transaction/event/{{ event.id }}/{{ t.id }}" 
-                         class="btn btn-{{ 'success' if t.paid else 'danger' }} btn-xs active" 
-                         style='width: 100%; padding: 4px; font-size: 0.9rem' role="button" aria-pressed="true">
-                        {{ 'OUI' if t.paid else 'NON' }}
-                      </a>
-                    </td>
+                    <td><p class="text-{{ 'success' if t.type else 'danger' }}">{{ "Entrée" if t.type else "Sortie" }}<p></td>
+                    <td><p class="text-{{ 'warning' if t.onhold else 'success' }}">{{ "En attente" if t.onhold else "OK" }}<p></td>
                   </tr>
                   {% endfor %}
                 </tbody>

@@ -121,11 +121,12 @@ transactions_schema = TransactionSchema(many=True, strict=True)
 @app.route('/transaction', methods=['POST'])
 def add_transaction():
     sum = request.json['sum']
-    paid = request.json['paid']
+    type = request.json['type']
+    onhold = request.json['onhold']
     description = request.json['description']
     user_id = request.json['user_id']
     event_id = request.json['event_id']
-    new_transaction = Transaction(sum=sum, paid=paid, user_id=user_id, event_id=event_id, description=description)
+    new_transaction = Transaction(sum=sum, onhold=onhold, type=type, user_id=user_id, event_id=event_id, description=description)
     db.session.add(new_transaction)
     db.session.commit()
     return transaction_schema.jsonify(new_transaction), 201
@@ -149,7 +150,8 @@ def update_transaction(id):
     if transaction is None:
         abort(404, f'Transaction not found for id: {id}')
     transaction.sum = request.json['sum']
-    transaction.paid = request.json['paid']
+    transaction.type = request.json['type']
+    transaction.onhold = request.json['onhold']
     transaction.description = request.json['description']
     transaction.user_id = request.json['user']
     transaction.event_id = request.json['event']

@@ -9,10 +9,13 @@ s = requests.session()
 # Get json containing total, paid and unpaid for a list of transaction
 
 def get_stats(transactions):
-    total = sum(transaction['sum'] for transaction in transactions)
-    paid = sum(transaction['sum'] for transaction in transactions if transaction['paid'])
-    unpaid = sum(transaction['sum'] for transaction in transactions if not transaction['paid'])
-    return {'total': total, 'paid': paid, 'unpaid': unpaid}
+    inflow = sum(transaction['sum'] for transaction in transactions if transaction['type'] and not transaction['onhold'])
+    outflow = sum(transaction['sum'] for transaction in transactions if not transaction['type'] and not transaction['onhold'])
+    total = inflow - outflow
+    onhold_inflow = sum(transaction['sum'] for transaction in transactions if transaction['onhold'] and transaction['type'])
+    onhold_outflow = sum(transaction['sum'] for transaction in transactions if transaction['onhold'] and not transaction['type'])
+    onhold = onhold_inflow - onhold_outflow
+    return {'total': total, 'inflow': inflow, 'outflow': outflow, 'onhold': onhold, 'onhold_inflow': onhold_inflow, 'onhold_outflow': onhold_outflow}
 
 
 # User functions
@@ -73,22 +76,20 @@ def get_transactions():
 def get_transaction(id):
     return json.loads(s.get(f'{API_URL}/transaction/{id}').text)
 
-def update_transaction_status(id):
-    transaction = get_transaction(id)
-    transaction.update({'paid': not transaction['paid']})
-    s.put(f'{API_URL}/transaction/{id}', json=transaction)
-    return
-
-
 # Misc stat functions
 
-def get_total_paid():
+def get_total_inflow():
     transactions = json.loads(s.get(f'{API_URL}/transaction').text)
-    return sum([transaction['sum'] for transaction in transactions if transaction['paid']])
+    return sum([transaction['sum'] for transaction in transactions if transaction['type'] and not transaction['onhold']])
 
-def get_total_unpaid():
+def get_total_outflow():
     transactions = json.loads(s.get(f'{API_URL}/transaction').text)
-    return sum([transaction['sum'] for transaction in transactions if not transaction['paid']])
+    return sum([transaction['sum'] for transaction in transactions if not transaction['type'] and not transaction['onhold']])
 
-def sort_users_by_unpaid():
-    return sorted(get_users(), key=lambda user: user['unpaid'], reverse=True)
+def get_total_onhold():
+    transactions = json.loads(s.get(f'{API_URL}/transaction').text)
+    return sum([transaction['sum'] for transaction in transactions if transaction['onhold'] and transaction['type']])\
+            - sum([transaction['sum'] for transaction in transactions if transaction['onhold'] and not transaction['type']])
+
+def sort_users_by_onhold():
+    return sorted(get_users(), key=lambda user: user['onhold'], reverse=True)

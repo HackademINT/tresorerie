@@ -21,10 +21,10 @@ def before_request():
 @ldap.login_required
 def default():
     return render_template('index.html', events=get_events(), 
-                          users=get_users(), total=get_total_paid(), 
+                          users=get_users(), total=get_total_inflow()-get_total_outflow(), 
                            total_event=count_events(),
-                           total_unpaid=get_total_unpaid(),
-                           user=sort_users_by_unpaid()[0])
+                           total_onhold=get_total_onhold(),
+                           user=sort_users_by_onhold()[0])
 
 
 @app.route("/pay")
@@ -42,16 +42,6 @@ def event(id):
 def user(id):
     user = get_user_with_eventname(id)
     return render_template('user.html', user=user)
-
-
-@app.route("/update_transaction/<referrer>/<id_referrer>/<id>")
-@ldap.group_required(groups=[b'test'])
-def update_transaction(referrer, id_referrer, id):
-    if referrer in ['user', 'event']:
-        update_transaction_status(id)
-        return redirect(f'/{referrer}/{id_referrer}')
-    else:
-        abort(404)
 
 
 @app.route("/login",methods=["GET","POST"])

@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validates, ValidationError
 from config import Config
 
 app = Flask(__name__)
@@ -44,7 +44,8 @@ class Transaction(db.Model):
     user_id       = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event         = db.relationship('Event', backref='transaction')
     event_id      = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False) 
-    paid          = db.Column(db.Boolean, default=False, nullable=False)
+    type          = db.Column(db.Boolean, nullable=False) # 0 for outflows, 1 for inflows
+    onhold        = db.Column(db.Boolean, nullable=False, default=1)
 
     def __repr__(self):
         return '<Transaction %r>' % self.id

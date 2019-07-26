@@ -34,12 +34,12 @@
           </div>
           <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-warning o-hidden h-100">
-              <div class="card-header">Somme encore impayée</div>
+              <div class="card-header">Somme en attente de paiement</div>
               <div class="card-body">
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-cash-register"></i>
                 </div>
-                <div class="mr-5">{{ total_unpaid }}€</div>
+                <div class="mr-5">{{ total_onhold }}€</div>
               </div>
             </div>
           </div>
@@ -56,7 +56,7 @@
                     tableau de la honte (dommage...)
                   {% else %}
                     {{ user.fname }} {{ user.lname }} rends
-                    l'argent stp, tu dois {{ user.unpaid }}€ à HackademINT!
+                    l'argent stp, tu dois {{ user.onhold }}€ à HackademINT!
                   {% endif %}
                 </div>
               </div>
@@ -77,7 +77,10 @@
                     <th>Evènement</th>
                     <th>Date</th>
                     <th>Description</th>
-                    <th>Total</th>
+                    <th>Total entrées</th>
+                    <th>Total sorties</th>
+                    <th>Total effectif</th>
+                    <th>Total en attente</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -86,7 +89,10 @@
                     <td><a href='/event/{{ event.id }}'>{{ event.name }}</a></td>
                     <td>{{ event.date }}</td>
                     <td>{{ event.description }}</td>
-                    <td>{{ event.total }}</td>
+                    <td>{{ event.inflow|round(2) }}</td>
+                    <td>{{ event.outflow|round(2) }}</td>
+                    <td>{{ event.total|round(2) }}</td>
+                    <td>{{ event.onhold|round(2) }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -100,25 +106,27 @@
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-users"></i>
-            Liste des users</div>
+            Liste des membres</div>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    <th>User</th>
-                    <th>Total payé</th>
-                    <th>Total impayé</th>
-                    <th>Total</th>
+                    <th>Membre</th>
+                    <th>Total contribué</th>
+                    <th>Total dépensé</th>
+                    <th>Total effectif</th>
+                    <th>Total en attente</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for user in users %}
                   <tr>
                     <td><a href='/user/{{ user.id }}'>{{ user.fname }} {{ user.lname }}</a></td>
-                    <td>{{ user.paid|round(2) }}</td>
-                    <td>{{ user.unpaid|round(2) }}</td>
-                    <td>{{ user.total|round(2) }}</td>
+                    <td>{{ user.inflow|round(2) }}</td>
+                    <td>{{ user.outflow|round(2) }}</td>
+                    <td>{{ user.total|round(2)}}</td>
+                    <td>{{ user.onhold|round(2) }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
