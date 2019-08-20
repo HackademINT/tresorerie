@@ -67,9 +67,26 @@ class Transaction(db.Model):
 
 # Database Marshmallow schemas
 
-class TransactionSchema(ma.ModelSchema):
+class SimpleUserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+
+class SimpleEventSchema(ma.ModelSchema):
+    class Meta:
+        model = Event
+
+class SimpleTransactionSchema(ma.ModelSchema):
     class Meta:
         model = Transaction
+
+class TransactionSchema(ma.ModelSchema):
+    id = fields.Integer()
+    sum = fields.Float()
+    description = fields.String()
+    user = fields.Nested(SimpleUserSchema)
+    event = fields.Nested(SimpleEventSchema)
+    type = fields.Boolean()
+    onhold = fields.Boolean()
 
 
 class UserSchema(ma.ModelSchema):
@@ -77,7 +94,7 @@ class UserSchema(ma.ModelSchema):
     fname = fields.String()
     lname = fields.String()
     email = fields.String()
-    transaction = fields.Nested(TransactionSchema, many=True)
+    transaction = fields.Nested(SimpleTransactionSchema, many=True)
 
 
 class EventSchema(ma.ModelSchema):
@@ -85,5 +102,5 @@ class EventSchema(ma.ModelSchema):
     name = fields.String()
     date = fields.String()
     description = fields.String()
-    transaction = fields.Nested(TransactionSchema, many=True)
+    transaction = fields.Nested(SimpleTransactionSchema, many=True)
 

@@ -46,7 +46,7 @@
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
       <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link" href="/pay" role="button">
+        <a class="nav-link" href="/remboursement" role="button">
           <i class="fas fa-cash-register fa-fw"></i>
         </a>
       </li>
@@ -55,10 +55,8 @@
           <i class="fas fa-user fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <!--
-            <a class="dropdown-item" href="/admin">Panel admin</a>
-          -->
-          <a class="dropdown-item" href="/logout">Se déconnecter</a>
+          <a class="dropdown-item" href="/admin">Panel admin</a>
+          <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">Se déconnecter</a>
         </div>
       </li>
     </ul>

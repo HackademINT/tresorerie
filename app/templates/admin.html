@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block main %}
+      <div class="container-fluid">
+
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">Accueil</a>
+          </li>
+          <li class="breadcrumb-item active">Zone admin</li>
+        </ol>
+
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            Transactions</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Transaction ID</th>
+                    <th>User associé</th>
+                    <th>Evènement associé</th>
+                    <th>Montant</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for transaction in transactions %}
+                  <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.user.fname }} {{ transaction.user.lname }}</td>
+                    <td>{{ transaction.event.name }}</td>
+                    <td>{{ transaction.sum }}</td>
+                    <td><p class="text-{{ 'success' if transaction.type else 'danger' }}">{{ "Entrée" if transaction.type else "Sortie" }}<p></td>
+                    <td><p class="text-{{ 'warning' if transaction.onhold else 'success' }}">{{ "En attente" if transaction.onhold else "OK" }}<p></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted"></div>
+        </div>
+
+      </div>
+{% endblock %}

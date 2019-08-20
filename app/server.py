@@ -27,6 +27,11 @@ def default():
                            user=sort_users_by_onhold()[0])
 
 
+@app.route("/admin")
+@ldap.group_required([b'admin'])
+def admin():
+    return render_template('admin.html', transactions=get_transactions())
+
 @app.route("/pay")
 def remboursement():
     return render_template('pay.html')
@@ -67,7 +72,6 @@ def logout():
 
 @app.errorhandler(404)
 def error404(error): 
-    flash(str(error), 'error')
     return redirect(url_for('default'))
 
 
