@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from datetime import datetime
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, json
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 from sqlalchemy.sql import func
@@ -39,9 +39,10 @@ users_schema = UserSchema(many=True, strict=True)
 @app.route('/user', methods=['POST'])
 @jwt_required()
 def add_user():
-    fname = request.json['fname']
-    lname = request.json['lname']
-    email = request.json['email']
+    data = json.loads(request.json)
+    fname = data['fname']
+    lname = data['lname']
+    email = data['email']
     new_user = User(fname=fname, lname=lname, email=email)
     db.session.add(new_user)
     db.session.commit()
@@ -68,9 +69,10 @@ def update_user(id):
     user = User.query.filter_by(id=id).first()
     if user is None:
         abort(404, f'User not found for id: {id}')
-    user.fname = request.json['fname']
-    user.lname = request.json['lname']
-    user.email = request.json['email']
+    data = json.loads(request.json)
+    user.fname = data['fname']
+    user.lname = data['lname']
+    user.email = data['email']
     db.session.commit()
     return user_schema.jsonify(user)
 
@@ -93,9 +95,10 @@ events_schema = EventSchema(many=True, strict=True)
 @app.route('/event', methods=['POST'])
 @jwt_required()
 def add_event():
-    name = request.json['name']
-    date = datetime.strptime(request.json['date'], '%Y-%m-%d')
-    description = request.json['description']
+    data = json.loads(request.json)
+    name = data['name']
+    date = datetime.strptime(data['date'], '%Y-%m-%d')
+    description = data['description']
     new_event = Event(name=name, date=date, description=description)
     db.session.add(new_event)
     db.session.commit()
@@ -122,9 +125,10 @@ def update_event(id):
     event = Event.query.filter_by(id=id).first()
     if event is None:
         abort(404, f'Event not found for id: {id}')
-    event.name = request.json['name']
-    event.date = datetime.strptime(request.json['date'], '%Y-%m-%d')
-    event.description = request.json['description']
+    data = json.loads(request.json)
+    event.name = data['name']
+    event.date = datetime.strptime(data['date'], '%Y-%m-%d')
+    event.description = data['description']
     db.session.commit()
     return event_schema.jsonify(event)
 
@@ -147,12 +151,13 @@ transactions_schema = TransactionSchema(many=True, strict=True)
 @app.route('/transaction', methods=['POST'])
 @jwt_required()
 def add_transaction():
-    sum = request.json['sum']
-    type = request.json['type']
-    onhold = request.json['onhold']
-    description = request.json['description']
-    user_id = request.json['user_id']
-    event_id = request.json['event_id']
+    data = json.loads(request.json)
+    sum = data['sum']
+    type = data['type']
+    onhold = data['onhold']
+    description = data['description']
+    user_id = data['user_id']
+    event_id = data['event_id']
     new_transaction = Transaction(sum=sum, onhold=onhold, type=type, user_id=user_id, event_id=event_id, description=description)
     db.session.add(new_transaction)
     db.session.commit()
@@ -179,12 +184,13 @@ def update_transaction(id):
     transaction = Transaction.query.filter_by(id=id).first()
     if transaction is None:
         abort(404, f'Transaction not found for id: {id}')
-    transaction.sum = request.json['sum']
-    transaction.type = request.json['type']
-    transaction.onhold = request.json['onhold']
-    transaction.description = request.json['description']
-    transaction.user_id = request.json['user']
-    transaction.event_id = request.json['event']
+    data = json.loads(request.json)
+    transaction.sum = data['sum']
+    transaction.type = data['type']
+    transaction.onhold = data['onhold']
+    transaction.description = data['description']
+    transaction.user_id = data['user']
+    transaction.event_id = data['event']
     db.session.commit()
     return transaction_schema.jsonify(transaction)
 
