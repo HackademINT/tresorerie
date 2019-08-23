@@ -79,6 +79,11 @@ def get_transactions():
 def get_transaction(id):
     return json.loads(s.get(f'{API_URL}/transaction/{id}', headers=headers).text)
 
+def add_transaction(transaction):
+    add = s.post(f'{API_URL}/transaction', json=json.dumps(transaction), headers=headers)
+    return add.status_code
+
+
 # Misc stat functions
 
 def get_total_inflow():

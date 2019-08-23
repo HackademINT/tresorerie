@@ -27,10 +27,32 @@ def default():
                            user=sort_users_by_onhold()[0])
 
 
-@app.route("/admin")
+@app.route("/admin", methods=['GET', 'POST'])
 @ldap.group_required([b'admin'])
 def admin():
-    return render_template('admin.html', transactions=get_transactions())
+    if request.method == 'GET':
+        events = sorted(get_events(), key=lambda e: e['id'], reverse=True)
+        users = sorted(get_users(), key=lambda u: u['id'], reverse=True)
+        return render_template('admin.html', users=users, events=events, transactions=get_transactions())
+    else:
+        description = request.form['description']
+        sum = float(request.form['sum'])
+        type = True if request.form['type'] == '1' else False
+        onhold = True if request.form['onhold'] == '1' else False
+        transaction = { "user_id": request.form['userId'], 
+                       "event_id": request.form['eventId'],
+                       "sum": request.form['sum'],
+                       "description": request.form['description'],
+                       "type": type,
+                       "onhold": onhold }
+        status = add_transaction(transaction)
+        if status == 201:
+            flash('Transaction ajoutée avec succès', 'succes')
+        else:
+            flash('Erreur lors de l\'ajout de la transaction', 'error')
+        return redirect(url_for('admin'))
+
+
 
 @app.route("/pay")
 def remboursement():
