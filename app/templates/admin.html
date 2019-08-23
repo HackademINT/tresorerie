@@ -85,22 +85,36 @@
                   </div>
                 </div>
 	      <div class="modal-footer">
-		<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+		<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
 		<button type="submit" class="btn btn-success">Ajouter</button>
 	        </div>
 	      </form>
 	    </div>
 	  </div>
 	</div> 
+
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-tasks"></i>
-            Transactions</div>
+            Opérations détaillées</div>
           <div class="card-body">
+
+	    <ul class="nav nav-pills nav-fill">
+	      <li class="nav-item">
+		<a class="nav-link active" href="/admin">Transactions</a>
+	      </li>
+	      <li class="nav-item">
+		<a class="nav-link" href="/admin/users">Utilisateurs</a>
+	      </li>
+	      <li class="nav-item">
+		<a class="nav-link" href="/admin/events">Evènements</a>
+	      </li>
+	    </ul>
+
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addTransactionModal">
-              <i class="fas fa-plus"></i> Ajouter une transaction
-            </button></br></br>
+	      </br><button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addTransactionModal">
+		<i class="fas fa-plus"></i> Ajouter une transaction
+	      </button></br></br>
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
                 <thead>
