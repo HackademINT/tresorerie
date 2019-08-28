@@ -21,7 +21,7 @@ class APIuser(db.Model):
     id            = db.Column(db.Integer, primary_key=True)
     username      = db.Column(db.String(100), nullable=False)
     password      = db.Column(db.String(100), nullable=False)
-    
+
     def __repr__(self):
         return 'APIuser %r' % self.id
 
@@ -44,9 +44,9 @@ class Event(db.Model):
     name          = db.Column(db.String(100), nullable=False)
     date          = db.Column(db.Date, nullable=False)
     description   = db.Column(db.String(500), default='')
-    
+
     def __repr__(self):
-        return '<Event %r>' % self.nom
+        return '<Event %r>' % self.name
 
 
 class Transaction(db.Model):
@@ -57,7 +57,7 @@ class Transaction(db.Model):
     user          = db.relationship('User', backref='transaction')
     user_id       = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event         = db.relationship('Event', backref='transaction')
-    event_id      = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False) 
+    event_id      = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     type          = db.Column(db.Boolean, nullable=False) # 0 for outflows, 1 for inflows
     onhold        = db.Column(db.Boolean, nullable=False, default=1)
 
