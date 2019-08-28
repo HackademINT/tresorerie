@@ -34,7 +34,7 @@ def admin():
     if request.method == 'GET':
         events = sorted(get_events(), key=lambda e: e['id'], reverse=True)
         users = sorted(get_users(), key=lambda u: u['id'], reverse=True)
-        return render_template('admin.html', transactions=get_transactions())
+        return render_template('admin.html', users=users, events=events, transactions=get_transactions())
     else:
         description = request.form['description']
         sum = float(request.form['sum'])
@@ -71,14 +71,14 @@ def admin_tabs(tab):
             if tab == 'events':
                 description = request.form['description']
                 name = request.form['name']
-                print(request.form['date'])
+                date = request.form['date']
                 date = datetime.strptime(request.form['date'], '%Y-%m-%d')
                 event = {"name": name,
                         "date": date.strftime('%Y-%m-%d'),
                         "description": description}
                 status = add_event(event)
                 if status == 201:
-                    flash('Evènement ajouté avec succès', 'succes')
+                    flash('Evènement ajouté avec succès', 'success')
                 else:
                     flash('Erreur lors de l\'ajout de l\'évènement', 'error')
             else:
@@ -90,7 +90,7 @@ def admin_tabs(tab):
                         "email": email}
                 status = add_user(user)
                 if status == 201:
-                    flash('Utilisateur ajouté avec succès', 'succes')
+                    flash('Utilisateur ajouté avec succès', 'success')
                 else:
                     flash('Erreur lors de l\'ajout de l\'utilisateur', 'error')
             return redirect(f'/admin/{tab}')

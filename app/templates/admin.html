@@ -91,7 +91,7 @@
 	      </form>
 	    </div>
 	  </div>
-	</div> 
+	</div>
 
         <div class="card mb-3">
           <div class="card-header">
@@ -99,7 +99,7 @@
             Opérations détaillées</div>
           <div class="card-body">
 
-	    <ul class="nav nav-pills nav-fill">
+	    <ul class="nav nav-tabs nav-fill">
 	      <li class="nav-item">
 		<a class="nav-link active" href="/admin">Transactions</a>
 	      </li>
@@ -120,9 +120,10 @@
                 <thead>
                   <tr>
                     <th>Transaction ID</th>
-                    <th>User associé</th>
+                    <th>Utilisateur associé</th>
                     <th>Evènement associé</th>
                     <th>Montant</th>
+                    <th>Description</th>
                     <th>Type</th>
                     <th>Statut</th>
                   </tr>
@@ -134,6 +135,7 @@
                     <td>{{ transaction.user.fname }} {{ transaction.user.lname }}</td>
                     <td>{{ transaction.event.name }}</td>
                     <td>{{ transaction.sum }}</td>
+                    <td>{{ transaction.description }}</td>
                     <td><p class="text-{{ 'success' if transaction.type else 'danger' }}">{{ "Entrée" if transaction.type else "Sortie" }}<p></td>
                     <td><p class="text-{{ 'warning' if transaction.onhold else 'success' }}">{{ "En attente" if transaction.onhold else "OK" }}<p></td>
                   </tr>
