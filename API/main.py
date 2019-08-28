@@ -53,7 +53,7 @@ def add_user():
 def get_users():
     all_users = User.query.all()
     result = users_schema.dump(all_users)
-    return jsonify(result.data)
+    return jsonify(result)
 
 @app.route('/user/<id>', methods=['GET'])
 @jwt_required()
@@ -109,7 +109,7 @@ def add_event():
 def get_events():
     all_events = Event.query.all()
     result = events_schema.dump(all_events)
-    return jsonify(result.data)
+    return jsonify(result)
 
 @app.route('/event/<id>', methods=['GET'])
 @jwt_required()
@@ -168,7 +168,7 @@ def add_transaction():
 def get_transactions():
     all_transactions = Transaction.query.all()
     result = transactions_schema.dump(all_transactions)
-    return jsonify(result.data)
+    return jsonify(result)
 
 @app.route('/transaction/<id>', methods=['GET'])
 @jwt_required()
