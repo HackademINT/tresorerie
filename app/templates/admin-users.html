@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block main %}
+      <div class="container-fluid">
+
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">Accueil</a>
+          </li>
+          <li class="breadcrumb-item active">Zone admin</li>
+        </ol>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <form method="POST">
+	        <div class="modal-header">
+		  <h5 class="modal-title" id="addUserModalTitle"><i class="fas fa-plus"></i> Ajouter un utilisateur</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+	        </div>
+	        <div class="modal-body">
+                <div class="form-group">
+                    <label for="lname" class="col-form-label"><b>Nom</b></label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="lname" name="lname" required pattern="^\w+$">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fname" class="col-form-label"><b>Prénom</b></label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="fname" name="fname" required pattern="^\w+$">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-form-label"><b>Email</b></label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="emailPrepend">@</span>
+                        </div>
+                        <input type="email" class="form-control" id="email" name="email" required placeholder="ex. jeanmichel@example.org" aria-describedby="emailPrepend">
+                    </div>
+                </div>
+            </div>
+	      <div class="modal-footer">
+		<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+		<button type="submit" class="btn btn-success">Ajouter</button>
+	        </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            Opérations détaillées</div>
+          <div class="card-body">
+
+	    <ul class="nav nav-pills nav-fill">
+	      <li class="nav-item">
+		<a class="nav-link" href="/admin">Transactions</a>
+	      </li>
+	      <li class="nav-item">
+		<a class="nav-link active" href="/admin/users">Utilisateurs</a>
+	      </li>
+	      <li class="nav-item">
+		<a class="nav-link" href="/admin/events">Evènements</a>
+	      </li>
+	    </ul>
+
+            <!-- Button trigger modal -->
+	      </br><button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addUserModal">
+		<i class="fas fa-plus"></i> Ajouter un utilisateur
+	      </button></br></br>
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>ID Utilisateur</th>
+                    <th>Nom Prénom</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                  <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.fname }} {{ user.lname }}</td>
+                    <td>{{ user.email }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted"></div>
+        </div>
+
+      </div>
+{% endblock %}

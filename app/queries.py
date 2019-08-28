@@ -43,6 +43,10 @@ def get_user_with_eventname(id):
         transaction.update({'eventname': events[transaction['event']]})
     return user
 
+def add_user(user):
+    add = s.post(f'{API_URL}/user', json=json.dumps(user), headers=headers)
+    return add.status_code
+
 
 # Event functions
 
@@ -69,6 +73,10 @@ def get_event_with_username(id):
 def count_events():
     events = json.loads(s.get(f'{API_URL}/event', headers=headers).text)
     return len(events)
+
+def add_event(event):
+    add = s.post(f'{API_URL}/event', json=json.dumps(event), headers=headers)
+    return add.status_code
 
 
 # Transaction functions

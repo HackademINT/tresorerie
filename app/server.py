@@ -5,6 +5,7 @@ from flask import Flask, g, session, render_template, request, redirect, flash, 
 from flask_simpleldap import LDAP
 from queries import *
 from config import Config
+from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -20,8 +21,8 @@ def before_request():
 @app.route("/")
 @ldap.login_required
 def default():
-    return render_template('index.html', events=get_events(), 
-                          users=get_users(), total=get_total_inflow()-get_total_outflow(), 
+    return render_template('index.html', events=get_events(),
+                          users=get_users(), total=get_total_inflow()-get_total_outflow(),
                            total_event=count_events(),
                            total_onhold=get_total_onhold(),
                            user=sort_users_by_onhold()[0])
@@ -33,13 +34,13 @@ def admin():
     if request.method == 'GET':
         events = sorted(get_events(), key=lambda e: e['id'], reverse=True)
         users = sorted(get_users(), key=lambda u: u['id'], reverse=True)
-        return render_template('admin.html', users=users, events=events, transactions=get_transactions())
+        return render_template('admin.html', transactions=get_transactions())
     else:
         description = request.form['description']
         sum = float(request.form['sum'])
         type = True if request.form['type'] == '1' else False
         onhold = True if request.form['onhold'] == '1' else False
-        transaction = { "user_id": request.form['userId'], 
+        transaction = { "user_id": request.form['userId'],
                        "event_id": request.form['eventId'],
                        "sum": request.form['sum'],
                        "description": request.form['description'],
@@ -52,6 +53,47 @@ def admin():
             flash('Erreur lors de l\'ajout de la transaction', 'error')
         return redirect(url_for('admin'))
 
+
+@app.route("/admin/<tab>", methods=['GET', 'POST'])
+@ldap.group_required([b'admin'])
+def admin_tabs(tab):
+    if tab not in ['users', 'events']:
+        return redirect(url_for('admin'))
+    else:
+        if request.method == 'GET':
+            if tab == 'events':
+                events = sorted(get_events(), key=lambda e: e['id'], reverse=True)
+                return render_template('admin-events.html', events=events)
+            else:
+                users = sorted(get_users(), key=lambda e: e['id'], reverse=True)
+                return render_template('admin-users.html', users=users)
+        else:
+            if tab == 'events':
+                description = request.form['description']
+                name = request.form['name']
+                print(request.form['date'])
+                date = datetime.strptime(request.form['date'], '%Y-%m-%d')
+                event = {"name": name,
+                        "date": date.strftime('%Y-%m-%d'),
+                        "description": description}
+                status = add_event(event)
+                if status == 201:
+                    flash('Evènement ajouté avec succès', 'succes')
+                else:
+                    flash('Erreur lors de l\'ajout de l\'évènement', 'error')
+            else:
+                fname = request.form['fname']
+                lname = request.form['lname']
+                email = request.form['email']
+                user = {"fname": fname,
+                        "lname": lname,
+                        "email": email}
+                status = add_user(user)
+                if status == 201:
+                    flash('Utilisateur ajouté avec succès', 'succes')
+                else:
+                    flash('Erreur lors de l\'ajout de l\'utilisateur', 'error')
+            return redirect(f'/admin/{tab}')
 
 
 @app.route("/pay")
@@ -93,9 +135,9 @@ def logout():
     return redirect('/login')
 
 @app.errorhandler(404)
-def error404(error): 
+def error404(error):
     return redirect(url_for('default'))
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8154, debug=True)
+    app.run(host='localhost', port=8154, debug=True)
