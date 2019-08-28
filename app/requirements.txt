@@ -7,6 +7,7 @@
 certifi==2019.6.16        # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via flask
+flask-caching==1.7.2
 flask-simpleldap==1.4.0
 flask==1.1.1
 idna==2.8                 # via requests

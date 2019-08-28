@@ -3,12 +3,14 @@
 from functools import wraps
 from flask import Flask, g, session, render_template, request, redirect, flash, url_for
 from flask_simpleldap import LDAP
+from flask_caching import Cache
 from queries import *
 from config import Config
 from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(Config)
+cache = Cache(app, config={'Cache_Type': 'simple'})
 ldap = LDAP(app)
 
 @app.before_request
@@ -19,6 +21,7 @@ def before_request():
         g.ldap_groups = ldap.get_user_groups(user=session['user_id'])
 
 @app.route("/")
+@cache.cached(timeout=60)
 @ldap.login_required
 def default():
     return render_template('index.html', events=get_events(),
@@ -29,6 +32,7 @@ def default():
 
 
 @app.route("/admin", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 @ldap.group_required([b'admin'])
 def admin():
     if request.method == 'GET':
@@ -55,6 +59,7 @@ def admin():
 
 
 @app.route("/admin/<tab>", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 @ldap.group_required([b'admin'])
 def admin_tabs(tab):
     if tab not in ['users', 'events']:
@@ -97,23 +102,27 @@ def admin_tabs(tab):
 
 
 @app.route("/pay")
+@cache.cached(timeout=3600)
 def remboursement():
     return render_template('pay.html')
 
 
 @app.route("/event/<id>")
+@cache.cached(timeout=60)
 def event(id):
     event = get_event_with_username(id)
     return render_template('event.html', event=event)
 
 
 @app.route("/user/<id>")
+@cache.cached(timeout=60)
 def user(id):
     user = get_user_with_eventname(id)
     return render_template('user.html', user=user)
 
 
 @app.route("/login",methods=["GET","POST"])
+@cache.cached(timeout=3600)
 def login():
     if g.user:
         return redirect(url_for('default'))
