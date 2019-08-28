@@ -33,8 +33,8 @@ def default():
 
 # User routes
 
-user_schema = UserSchema(strict=True)
-users_schema = UserSchema(many=True, strict=True)
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 @app.route('/user', methods=['POST'])
 @jwt_required()
@@ -89,8 +89,8 @@ def delete_user(id):
 
 # Event routes
 
-event_schema = EventSchema(strict=True)
-events_schema = EventSchema(many=True, strict=True)
+event_schema = EventSchema()
+events_schema = EventSchema(many=True)
 
 @app.route('/event', methods=['POST'])
 @jwt_required()
@@ -145,8 +145,8 @@ def delete_event(id):
 
 # Transaction routes
 
-transaction_schema = TransactionSchema(strict=True)
-transactions_schema = TransactionSchema(many=True, strict=True)
+transaction_schema = TransactionSchema()
+transactions_schema = TransactionSchema(many=True)
 
 @app.route('/transaction', methods=['POST'])
 @jwt_required()
@@ -207,4 +207,4 @@ def delete_transaction(id):
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(host='0.0.0.0', port=8155, debug=True)
+    app.run(host='localhost', port=8155, debug=True)
