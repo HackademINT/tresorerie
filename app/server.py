@@ -10,7 +10,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(Config)
-cache = Cache(app, config={'Cache_Type': 'simple'})
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 ldap = LDAP(app)
 
 @app.before_request
