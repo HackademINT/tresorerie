@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
-        
+
       <div class="container-fluid">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
@@ -17,7 +17,7 @@
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-dollar-sign"></i>
                 </div>
-                <div class="mr-5">{{ total }}€</div>
+                <div class="mr-5">{{ total|round(2) }}€</div>
               </div>
             </div>
           </div>
@@ -39,7 +39,7 @@
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-cash-register"></i>
                 </div>
-                <div class="mr-5">{{ total_onhold }}€</div>
+                <div class="mr-5">{{ total_onhold|round(2) }}€</div>
               </div>
             </div>
           </div>
@@ -56,7 +56,7 @@
                     tableau de la honte (dommage...)
                   {% else %}
                     {{ user.fname }} {{ user.lname }} rends
-                    l'argent stp, tu dois {{ user.onhold }}€ à HackademINT!
+                    l'argent stp, tu dois {{ user.onhold|round(2) }}€ à HackademINT!
                   {% endif %}
                 </div>
               </div>
@@ -135,7 +135,7 @@
           </div>
           <div class="card-footer small text-muted"></div>
         </div>
-      
+
       </div>
       <!-- /.container-fluid -->
 {% endblock %}

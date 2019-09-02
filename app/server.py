@@ -2,16 +2,18 @@
 
 from functools import wraps
 from flask import Flask, g, session, render_template, request, redirect, flash, url_for
-from flask_simpleldap import LDAP
 from flask_caching import Cache
+from flask_simpleldap import LDAP
+from datetime import datetime
 from queries import *
 from config import Config
-from datetime import datetime
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 ldap = LDAP(app)
+
 
 @app.before_request
 def before_request():
@@ -19,6 +21,7 @@ def before_request():
     if 'user_id' in session:
         g.user = {}
         g.ldap_groups = ldap.get_user_groups(user=session['user_id'])
+
 
 @app.route("/")
 @cache.cached(timeout=60)
@@ -32,7 +35,6 @@ def default():
 
 
 @app.route("/admin", methods=['GET', 'POST'])
-@cache.cached(timeout=60)
 @ldap.group_required([b'admin'])
 def admin():
     if request.method == 'GET':
@@ -40,8 +42,6 @@ def admin():
         users = sorted(get_users(), key=lambda u: u['id'], reverse=True)
         return render_template('admin.html', users=users, events=events, transactions=get_transactions())
     else:
-        description = request.form['description']
-        sum = float(request.form['sum'])
         type = True if request.form['type'] == '1' else False
         onhold = True if request.form['onhold'] == '1' else False
         transaction = { "user_id": request.form['userId'],
@@ -52,14 +52,13 @@ def admin():
                        "onhold": onhold }
         status = add_transaction(transaction)
         if status == 201:
-            flash('Transaction ajoutée avec succès', 'succes')
+            flash('Transaction ajoutée avec succès', 'success')
         else:
             flash('Erreur lors de l\'ajout de la transaction', 'error')
         return redirect(url_for('admin'))
 
 
 @app.route("/admin/<tab>", methods=['GET', 'POST'])
-@cache.cached(timeout=60)
 @ldap.group_required([b'admin'])
 def admin_tabs(tab):
     if tab not in ['users', 'events']:
@@ -98,7 +97,7 @@ def admin_tabs(tab):
                     flash('Utilisateur ajouté avec succès', 'success')
                 else:
                     flash('Erreur lors de l\'ajout de l\'utilisateur', 'error')
-            return redirect(f'/admin/{tab}')
+        return redirect(f'/admin/{tab}')
 
 
 @app.route("/pay")
@@ -122,7 +121,6 @@ def user(id):
 
 
 @app.route("/login",methods=["GET","POST"])
-@cache.cached(timeout=3600)
 def login():
     if g.user:
         return redirect(url_for('default'))
@@ -131,9 +129,12 @@ def login():
         passwd = request.form['passwd']
         test = ldap.bind_user(user, passwd)
         if test is None or passwd == '':
-            return 'Invalid credentials'
+            flash('Echec d\'authentification', 'error')
+            return redirect(url_for('login'))
         else:
-            session['user_id'] = request.form['user']
+            user = request.form['user']
+            session['user_id'] = user
+            flash(f'Bienvenue {user}', 'success')
             return redirect('/')
     return render_template('login.html')
 
