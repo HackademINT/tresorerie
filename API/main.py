@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import jsonify, request, abort, json
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql import func
 from models import *
 
@@ -82,9 +83,12 @@ def delete_user(id):
     user = User.query.filter_by(id=id).first()
     if user is None:
         abort(404, f'User not found for id: {id}')
-    db.session.delete(user)
-    db.session.commit()
-    return user_schema.jsonify(user), 204
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return '', 204
+    except IntegrityError:
+        abort(405, f'User {id} can\'t be deleted since there are transactions depending on this object')
 
 
 # Event routes
@@ -138,9 +142,12 @@ def delete_event(id):
     event = Event.query.filter_by(id=id).first()
     if event is None:
         abort(404, f'Event not found for id: {id}')
-    db.session.delete(event)
-    db.session.commit()
-    return '', 204
+    try:
+        db.session.delete(event)
+        db.session.commit()
+        return '', 204
+    except IntegrityError:
+        abort(405, f'Event {id} can\'t be deleted since there are transactions depending on this object')
 
 
 # Transaction routes
@@ -200,9 +207,12 @@ def delete_transaction(id):
     transaction = Transaction.query.filter_by(id=id).first()
     if transaction is None:
         abort(404, f'Transaction not found for id: {id}')
-    db.session.delete(transaction)
-    db.session.commit()
-    return '', 204
+    try:
+        db.session.delete(transaction)
+        db.session.commit()
+        return '', 204
+    except IntegrityError:
+        abort(405, f'Event {id} can\'t be deleted since there are transactions depending on this object')
 
 
 if __name__ == '__main__':
