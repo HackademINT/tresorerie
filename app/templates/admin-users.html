@@ -9,50 +9,6 @@
           <li class="breadcrumb-item active">Zone admin</li>
         </ol>
 
-
-	<!-- Modal -->
-	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <form method="POST">
-	        <div class="modal-header">
-		  <h5 class="modal-title" id="addUserModalTitle"><i class="fas fa-plus"></i> Ajouter un utilisateur</h5>
-		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		    <span aria-hidden="true">&times;</span>
-		  </button>
-	        </div>
-	        <div class="modal-body">
-                <div class="form-group">
-                    <label for="lname" class="col-form-label"><b>Nom</b></label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="lname" name="lname" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="fname" class="col-form-label"><b>Prénom</b></label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="fname" name="fname" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="col-form-label"><b>Email</b></label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="emailPrepend">@</span>
-                        </div>
-                        <input type="email" class="form-control" id="email" name="email" required placeholder="ex. jeanmichel@example.org" aria-describedby="emailPrepend">
-                    </div>
-                </div>
-            </div>
-	      <div class="modal-footer">
-		<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
-		<button type="submit" class="btn btn-success">Ajouter</button>
-	        </div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
-
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-tasks"></i>
@@ -71,7 +27,8 @@
 	      </li>
 	    </ul>
 
-            <!-- Button trigger modal -->
+          <!-- Button trigger modal -->
+          {% include 'user-form.html' %}
 	      </br><button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addUserModal">
 		<i class="fas fa-plus"></i> Ajouter un utilisateur
 	      </button></br></br>
@@ -82,14 +39,21 @@
                     <th>ID Utilisateur</th>
                     <th>Prénom Nom</th>
                     <th>Email</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for user in users %}
                   <tr>
+                    <form method="post">
                     <td>{{ user.id }}</td>
+                    <input type="hidden" name="uid" value="{{ user.id }}" />
                     <td>{{ user.fname }} {{ user.lname }}</td>
                     <td>{{ user.email }}</td>
+                    <td><button type="button" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
+                        <input type="hidden" name="action" value="delete" />
+                        <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+                    </form>
                   </tr>
                   {% endfor %}
                 </tbody>

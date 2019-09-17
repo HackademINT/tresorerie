@@ -9,45 +9,6 @@
           <li class="breadcrumb-item active">Zone admin</li>
         </ol>
 
-
-	<!-- Modal -->
-	<div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModal" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <form method="POST">
-	        <div class="modal-header">
-		  <h5 class="modal-title" id="addEventModalTitle"><i class="fas fa-plus"></i> Ajouter un évènement</h5>
-		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		    <span aria-hidden="true">&times;</span>
-		  </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="name" class="col-form-label"><b>Nom</b></label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="date" class="col-form-label"><b>Date</b></label>
-                    <div class="input-group mb-3">
-                        <input type="date" class="form-control" id="date" name="date">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="description" class="col-form-label"><b>Description</b></label>
-                    <textarea class="form-control" name="description" id="description" placeholder="courte description"></textarea>
-                </div>
-            </div>
-	      <div class="modal-footer">
-		<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
-		<button type="submit" class="btn btn-success">Ajouter</button>
-	        </div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
-
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-tasks"></i>
@@ -66,7 +27,8 @@
 	      </li>
 	    </ul>
 
-            <!-- Button trigger modal -->
+          <!-- Button trigger modal -->
+          {% include 'event-form.html' %}
 	      </br><button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addEventModal">
 		<i class="fas fa-plus"></i> Ajouter un évènement
 	      </button></br></br>
@@ -78,15 +40,22 @@
                     <th>Nom</th>
                     <th>Date</th>
                     <th>Description</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for event in events %}
                   <tr>
+                    <form method="post">
                     <td>{{ event.id }}</td>
+                    <input type="hidden" name="eid" value="{{ event.id }}" />
                     <td>{{ event.name }}</td>
                     <td>{{ event.date }}</td>
                     <td>{{ event.description }}</td>
+                    <td><button type="button" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
+                        <input type="hidden" name="action" value="delete" />
+                        <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+                    </form>
                   </tr>
                   {% endfor %}
                 </tbody>
