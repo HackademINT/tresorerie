@@ -31,7 +31,7 @@ def default():
                           users=get_users(), total=get_total_inflow()-get_total_outflow(),
                            total_event=count_events(),
                            total_onhold=get_total_onhold(),
-                           user=sort_users_by_onhold()[0])
+                           user=get_worst_user())
 
 
 @app.route("/admin", methods=['GET', 'POST'])
@@ -59,6 +59,7 @@ def admin():
                     "onhold": onhold
                     }
             if action == 'add':
+                transaction.update({"user_id": request.form["userId"], "event_id": request.form["eventId"]})
                 status = add_transaction(transaction)
                 if status == 201:
                     flash('Transaction ajoutée avec succès', 'success')

@@ -2,7 +2,9 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref
 from flask_marshmallow import Marshmallow
+from werkzeug.security import check_password_hash
 from marshmallow import Schema, fields
 from config import Config
 
@@ -20,10 +22,14 @@ class APIuser(db.Model):
     __tablename__ = 'api_user'
     id            = db.Column(db.Integer, primary_key=True)
     username      = db.Column(db.String(100), nullable=False)
-    password      = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(128))
 
     def __repr__(self):
         return 'APIuser %r' % self.id
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
 # Database SQLAlchemy models
 
@@ -54,10 +60,10 @@ class Transaction(db.Model):
     id            = db.Column(db.Integer, primary_key=True)
     sum           = db.Column(db.Float, nullable=False)
     description   = db.Column(db.String(500), default='')
-    user          = db.relationship('User', backref='transaction')
-    user_id       = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    event         = db.relationship('Event', backref='transaction')
-    event_id      = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user          = db.relationship('User', backref=backref('transaction', cascade="all,delete"))
+    user_id       = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    event         = db.relationship('Event', backref=backref('transaction', cascade="all,delete"))
+    event_id      = db.Column(db.Integer, db.ForeignKey('event.id', ondelete='CASCADE'), nullable=False)
     type          = db.Column(db.Boolean, nullable=False) # 0 for outflows, 1 for inflows
     onhold        = db.Column(db.Boolean, nullable=False, default=1)
 

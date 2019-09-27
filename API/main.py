@@ -5,14 +5,20 @@ from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql import func
+from random import choice
+from string import ascii_letters
+from werkzeug.security import generate_password_hash
 from models import *
+import logging
 
+
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.DEBUG)
 
 # Initialize authentication
 
 def authenticate(username, password):
     api_user = APIuser.query.filter_by(username=username).first()
-    if api_user and safe_str_cmp(api_user.password.encode('utf-8'), password.encode('utf-8')):
+    if api_user and api_user.check_password(password):
         return api_user
 
 def identity(payload):
@@ -83,12 +89,9 @@ def delete_user(id):
     user = User.query.filter_by(id=id).first()
     if user is None:
         abort(404, f'User not found for id: {id}')
-    try:
-        db.session.delete(user)
-        db.session.commit()
-        return '', 204
-    except IntegrityError:
-        abort(405, f'User {id} can\'t be deleted since there are transactions depending on this object')
+    db.session.delete(user)
+    db.session.commit()
+    return '', 204
 
 
 # Event routes
@@ -142,13 +145,9 @@ def delete_event(id):
     event = Event.query.filter_by(id=id).first()
     if event is None:
         abort(404, f'Event not found for id: {id}')
-    try:
-        db.session.delete(event)
-        db.session.commit()
-        return '', 204
-    except IntegrityError:
-        abort(405, f'Event {id} can\'t be deleted since there are transactions depending on this object')
-
+    db.session.delete(event)
+    db.session.commit()
+    return '', 204
 
 # Transaction routes
 
@@ -219,4 +218,10 @@ def delete_transaction(id):
 
 if __name__ == '__main__':
     db.create_all()
+    if APIuser.query.filter_by(id=1).first() is None:
+        new_password = ''.join(choice(ascii_letters) for i in range(20))
+        admin = APIuser(username='admin', password_hash=generate_password_hash(new_password))
+        db.session.add(admin)
+        db.session.commit()
+        logging.info("Your default credentials have been generated, you can now get your access token by executing the following command:\ncurl -d '{\"username\": \"%s\", \"password\": \"%s\"}' -H \"Content-Type: application/json\" -X POST http://localhost:8155/auth" % ('admin', new_password))
     app.run(host='localhost', port=8155, debug=True)

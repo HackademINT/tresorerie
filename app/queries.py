@@ -132,3 +132,9 @@ def get_total_onhold():
 
 def sort_users_by_onhold():
     return sorted(get_users(), key=lambda user: user['onhold'], reverse=True)
+
+def get_worst_user():
+    users = sort_users_by_onhold()
+    if len(users) == 0:
+        return None
+    return users[0]
