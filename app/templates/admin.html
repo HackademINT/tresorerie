@@ -51,6 +51,7 @@
                 <tbody>
                   {% for transaction in transactions %}
                   <tr>
+                    {% include 'modify-transaction.html' %}
                     <form method="post">
                     <td>{{ transaction.id }}</td>
                     <input type="hidden" name="tid" value="{{ transaction.id }}" />
@@ -60,9 +61,12 @@
                     <td>{{ transaction.description }}</td>
                     <td><p class="text-{{ 'success' if transaction.type else 'danger' }}">{{ "Entrée" if transaction.type else "Sortie" }}<p></td>
                     <td><p class="text-{{ 'warning' if transaction.onhold else 'success' }}">{{ "En attente" if transaction.onhold else "OK" }}<p></td>
-                    <td><button type="button" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
+                    <td>
+                        <button type="button" data-toggle="modal" data-target="#modifyTransactionModal{{ transaction.id }}" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
+
                         <input type="hidden" name="action" value="delete" />
-                        <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+                        <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                    </td>
                     </form>
                   </tr>
                   {% endfor %}

@@ -196,8 +196,10 @@ def update_transaction(id):
     transaction.type = data['type']
     transaction.onhold = data['onhold']
     transaction.description = data['description']
-    transaction.user_id = data['user']
-    transaction.event_id = data['event']
+    if data.get('user_id', '') != '':
+        transaction.user_id = data['user_id']
+    if data.get('event_id', '') != '':
+        transaction.event_id = data['event_id']
     db.session.commit()
     return transaction_schema.jsonify(transaction)
 

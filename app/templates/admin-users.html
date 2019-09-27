@@ -44,13 +44,14 @@
                 </thead>
                 <tbody>
                   {% for user in users %}
+                  {% include 'modify-user.html' %}
                   <tr>
                     <form method="post">
                     <td>{{ user.id }}</td>
                     <input type="hidden" name="uid" value="{{ user.id }}" />
                     <td>{{ user.fname }} {{ user.lname }}</td>
                     <td>{{ user.email }}</td>
-                    <td><button type="button" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
+                    <td><button type="button" data-toggle="modal" data-target="#modifyUserModal{{ user.id }}" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
                         <input type="hidden" name="action" value="delete" />
                         <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
                     </form>

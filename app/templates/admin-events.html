@@ -45,6 +45,7 @@
                 </thead>
                 <tbody>
                   {% for event in events %}
+                  {% include 'modify-event.html' %}
                   <tr>
                     <form method="post">
                     <td>{{ event.id }}</td>
@@ -52,7 +53,7 @@
                     <td>{{ event.name }}</td>
                     <td>{{ event.date }}</td>
                     <td>{{ event.description }}</td>
-                    <td><button type="button" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
+                    <td><button type="button" data-toggle="modal" data-target="#modifyEventModal{{ event.id }}" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
                         <input type="hidden" name="action" value="delete" />
                         <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
                     </form>

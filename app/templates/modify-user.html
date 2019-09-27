@@ -1,0 +1,45 @@
+{% block content %}
+<div class="modal fade" id="modifyUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="modifyUserModal{{ user.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifyUserModal{{ user.id }}Title"><i class="fas fa-edit"></i> Modifier un utilisateur</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="lname" class="col-form-label"><b>Nom</b></label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="lname" name="lname" value="{{ user.lname }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fname" class="col-form-label"><b>Prénom</b></label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="fname" name="fname" value="{{ user.fname }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-form-label"><b>Email</b></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="emailPrepend">@</span>
+                            </div>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required placeholder="ex. jeanmichel@example.org" aria-describedby="emailPrepend">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="uid" value="{{ user.id }}" />
+                    <input type="hidden" name="action" value="modify" />
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Valider</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -51,6 +51,9 @@ def delete_user(uid):
     delete = s.delete(f'{API_URL}/user/{uid}', headers=headers)
     return delete.status_code
 
+def modify_user(user):
+    modify = s.put(f'{API_URL}/user/{user["uid"]}', json=json.dumps(user), headers=headers)
+    return modify.status_code
 
 # Event functions
 
@@ -86,6 +89,10 @@ def delete_event(eid):
     delete = s.delete(f'{API_URL}/event/{eid}', headers=headers)
     return delete.status_code
 
+def modify_event(event):
+    modify = s.put(f'{API_URL}/event/{event["eid"]}', json=json.dumps(event), headers=headers)
+    return modify.status_code
+
 
 # Transaction functions
 
@@ -102,6 +109,10 @@ def add_transaction(transaction):
 def delete_transaction(tid):
     delete = s.delete(f'{API_URL}/transaction/{tid}', headers=headers)
     return delete.status_code
+
+def modify_transaction(transaction):
+    modify = s.put(f'{API_URL}/transaction/{transaction["tid"]}', json=json.dumps(transaction), headers=headers)
+    return modify.status_code
 
 
 # Misc stat functions

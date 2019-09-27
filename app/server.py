@@ -43,27 +43,34 @@ def admin():
         return render_template('admin.html', users=users, events=events, transactions=get_transactions())
     else:
         action = request.form['action']
-        print(action)
-        if action == 'add':
-            type = True if request.form['type'] == '1' else False
-            onhold = True if request.form['onhold'] == '1' else False
-            transaction = { "user_id": request.form['userId'],
-                           "event_id": request.form['eventId'],
-                           "sum": request.form['sum'],
-                           "description": request.form['description'],
-                           "type": type,
-                           "onhold": onhold }
-            status = add_transaction(transaction)
-            if status == 201:
-                flash('Transaction ajoutée avec succès', 'success')
-            else:
-                flash('Erreur lors de l\'ajout de la transaction', 'error')
-        elif action == 'delete':
+        if action == 'delete':
             status = delete_transaction(request.form['tid'])
             if status == 204:
                 flash('Transaction supprimée avec succès', 'success')
             else:
                 flash('Erreur lors de la suppression de la transaction', 'error')
+        else:
+            type = True if request.form['type'] == '1' else False
+            onhold = True if request.form['onhold'] == '1' else False
+            transaction = {
+                    "sum": request.form['sum'],
+                    "description": request.form['description'],
+                    "type": type,
+                    "onhold": onhold
+                    }
+            if action == 'add':
+                status = add_transaction(transaction)
+                if status == 201:
+                    flash('Transaction ajoutée avec succès', 'success')
+                else:
+                    flash('Erreur lors de l\'ajout de la transaction', 'error')
+            elif action == 'modify':
+                transaction.update({"tid": request.form['tid']})
+                status = modify_transaction(transaction)
+                if status == 200:
+                    flash('Transaction modifiée avec succès', 'success')
+                else:
+                    flash('Erreur lors de la modification de la transaction', 'error')
     return redirect(url_for('admin'))
 
 
@@ -75,22 +82,30 @@ def admin_events():
         return render_template('admin-events.html', events=events)
     else:
         action = request.form['action']
-        if action == 'add':
-            date = datetime.strptime(request.form['date'], '%Y-%m-%d')
-            event = {"name": request.form['name'],
-                    "date": date.strftime('%Y-%m-%d'),
-                    "description": request.form['description']}
-            status = add_event(event)
-            if status == 201:
-                flash('Evènement ajouté avec succès', 'success')
-            else:
-                flash('Erreur lors de l\'ajout de l\'évènement', 'error')
-        elif action == 'delete':
+        if action == 'delete':
             status = delete_event(request.form['eid'])
             if status == 204:
                 flash('Evènement supprimé avec succès', 'success')
             else:
                 flash('Erreur lors de la suppression de l\'évènement', 'error')
+        else:
+            date = datetime.strptime(request.form['date'], '%Y-%m-%d')
+            event = {"name": request.form['name'],
+                    "date": date.strftime('%Y-%m-%d'),
+                    "description": request.form['description']}
+            if action == 'add':
+                status = add_event(event)
+                if status == 201:
+                    flash('Evènement ajouté avec succès', 'success')
+                else:
+                    flash('Erreur lors de l\'ajout de l\'évènement', 'error')
+            elif action == 'modify':
+                event.update({"eid": request.form['eid']})
+                status = modify_event(event)
+                if status == 200:
+                    flash('Evènement modifié avec succès', 'success')
+                else:
+                    flash('Erreur lors de la modification de l\'évènement', 'error')
     return redirect(f'/admin/events')
 
 
@@ -102,24 +117,29 @@ def admin_users():
         return render_template('admin-users.html', users=users)
     else:
         action = request.form['action']
-        if action == 'add':
-            fname = request.form['fname']
-            lname = request.form['lname']
-            email = request.form['email']
-            user = {"fname": fname,
-                    "lname": lname,
-                    "email": email}
-            status = add_user(user)
-            if status == 201:
-                flash('Utilisateur ajouté avec succès', 'success')
-            else:
-                flash('Erreur lors de l\'ajout de l\'utilisateur', 'error')
-        elif action == 'delete':
+        if action == 'delete':
             status = delete_user(request.form['uid'])
             if status == 204:
                 flash('Utilisateur supprimé avec succès', 'success')
             else:
                 flash('Erreur lors de la suppression de l\'utilisateur', 'error')
+        else:
+            user = {"fname": request.form['fname'],
+                    "lname": request.form['lname'],
+                    "email": request.form['email']}
+            if action == 'add':
+                status = add_user(user)
+                if status == 201:
+                    flash('Utilisateur ajouté avec succès', 'success')
+                else:
+                    flash('Erreur lors de l\'ajout de l\'utilisateur', 'error')
+            elif action == 'modify':
+                user.update({"uid": request.form['uid']})
+                status = modify_user(user)
+                if status == 200:
+                    flash('Utilisateur modifié avec succès', 'success')
+                else:
+                    flash('Erreur lors de la modification de l\'utilisateur', 'error')
     return redirect(f'/admin/users')
 
 
