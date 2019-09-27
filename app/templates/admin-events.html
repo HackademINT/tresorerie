@@ -55,7 +55,8 @@
                     <td>{{ event.description }}</td>
                     <td><button type="button" data-toggle="modal" data-target="#modifyEventModal{{ event.id }}" class="btn btn-outline-info"><i class="fa fa-edit"></i></button>
                         <input type="hidden" name="action" value="delete" />
-                        <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+                        {% include 'delete-event.html' %}
+                        <button type="button" data-toggle="modal" data-target="#deleteEventModal{{ event.id }}" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                     </form>
                   </tr>
                   {% endfor %}

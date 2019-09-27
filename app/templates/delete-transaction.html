@@ -1,0 +1,50 @@
+<!-- Logout Modal-->
+<div class="modal fade" id="deleteTransactionModal{{ transaction.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTransactionModalLabel"><i class="fas fa-trash"></i> Es-tu sûr de vouloir supprimer cette transaction?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        Transaction n°{{ transaction.id }}
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col"><b>Utilisateur: </b></div>
+                            <div class="col">{{ transaction.user.fname }} {{ transaction.user.lname }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Ev&egrave;nement: </b></div>
+                            <div class="col">{{ transaction.event.name }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Description: </b></div>
+                            <div class="col">{{ transaction.description }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Montant: </b></div>
+                            <div class="col">{{ transaction.sum }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Type: </b></div>
+                            <div class="col">{{ "Entrée" if transaction.type else "Sortie" }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Statut: </b></div>
+                            <div class="col">{{ "En attente" if transaction.onhold else "OK" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-success">Confirmer</a>
+            </div>
+        </div>
+    </div>
+</div>
