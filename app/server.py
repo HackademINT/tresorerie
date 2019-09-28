@@ -27,11 +27,14 @@ def before_request():
 @cache.cached(timeout=60)
 @ldap.login_required
 def default():
+    transactions = get_transactions()
+    stats = get_stats(transactions)
     return render_template('index.html', events=get_events(),
-                          users=get_users(), total=get_total_inflow()-get_total_outflow(),
-                           total_event=count_events(),
-                           total_onhold=get_total_onhold(),
-                           user=get_worst_user())
+                          users=get_users(), total=stats['total'],
+                          preview=stats['total_preview'],
+                           total_onhold=stats['onhold'],
+                           worst_user=get_worst_user(),
+                           best_user=get_best_user())
 
 
 @app.route("/admin", methods=['GET', 'POST'])

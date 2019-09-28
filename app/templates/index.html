@@ -12,34 +12,40 @@
         <div class="row">
           <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-success o-hidden h-100">
-             <div class="card-header">Etat de la trésorerie</div>
+             <div class="card-header">Etat actuel de la trésorerie</div>
               <div class="card-body">
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-dollar-sign"></i>
                 </div>
-                <div class="mr-5">{{ total|round(2) }}€</div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-info o-hidden h-100">
-              <div class="card-header">Total d'évènements</div>
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fas fa-fw fa-clipboard-check"></i>
-                </div>
-                <div class="mr-5">{{ total_event }}</div>
+                <div class="mr-5">Il y a actuellement {{ total|round(2) }}€ dans la trésorerie</div>
               </div>
             </div>
           </div>
           <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-warning o-hidden h-100">
-              <div class="card-header">Somme en attente de paiement</div>
+              <div class="card-header">Etat prévisionnel</div>
               <div class="card-body">
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-cash-register"></i>
                 </div>
-                <div class="mr-5">{{ total_onhold|round(2) }}€</div>
+                <div class="mr-5">Une fois que tout sera réglé, la trésorerie sera à {{ preview|round(2) }}€</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-info o-hidden h-100">
+              <div class="card-header">Meilleur contributeur</div>
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-clipboard-check"></i>
+                </div>
+                <div class="mr-5">
+                  {% if not best_user.fname %}
+                  Aucun contributeur...
+                  {% else %}
+                  Merci à notre meilleur contributeur {{ best_user.fname }} {{ best_user.lname }}, tu as rapporté un total de {{ best_user.total|round(2) }}€ à HackademINT! Hourra!
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
@@ -51,12 +57,12 @@
                   <i class="fas fa-fw fa-angry"></i>
                 </div>
                 <div class="mr-5">
-                  {% if not user.fname %}
+                  {% if not worst_user.fname %}
                     Tout est en ordre, il n'y a personne à afficher sur le
                     tableau de la honte (dommage...)
                   {% else %}
-                    {{ user.fname }} {{ user.lname }} rends
-                    l'argent stp, tu dois {{ user.onhold|round(2) }}€ à HackademINT!
+                    {{ worst_user.fname }} {{ worst_user.lname }} rends
+                    l'argent stp, tu dois {{ worst_user.onhold|round(2) }}€ à HackademINT!
                   {% endif %}
                 </div>
               </div>
@@ -77,10 +83,13 @@
                     <th>Evènement</th>
                     <th>Date</th>
                     <th>Description</th>
-                    <th>Total entrées</th>
-                    <th>Total sorties</th>
+                    <th>Entrées effectives</th>
+                    <th>Sorties effectives</th>
+                    <th>Entrées en attente</th>
+                    <th>Sorties en attente</th>
                     <th>Total effectif</th>
                     <th>Total en attente</th>
+                    <th>Total prévisionnel</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -91,8 +100,11 @@
                     <td>{{ event.description }}</td>
                     <td>{{ event.inflow|round(2) }}</td>
                     <td>{{ event.outflow|round(2) }}</td>
+                    <td>{{ event.onhold_inflow|round(2) }}</td>
+                    <td>{{ event.onhold_outflow|round(2) }}</td>
                     <td>{{ event.total|round(2) }}</td>
                     <td>{{ event.onhold|round(2) }}</td>
+                    <td>{{ event.total_preview|round(2) }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -113,10 +125,13 @@
                 <thead>
                   <tr>
                     <th>Membre</th>
-                    <th>Total contribué</th>
-                    <th>Total dépensé</th>
+                    <th>Contributions effectives</th>
+                    <th>Dépenses effectives</th>
+                    <th>Contributions en attente</th>
+                    <th>Dépenses en attente</th>
                     <th>Total effectif</th>
                     <th>Total en attente</th>
+                    <th>Total prévisionnel</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,8 +140,11 @@
                     <td><a href='/user/{{ user.id }}'>{{ user.fname }} {{ user.lname }}</a></td>
                     <td>{{ user.inflow|round(2) }}</td>
                     <td>{{ user.outflow|round(2) }}</td>
+                    <td>{{ user.onhold_inflow|round(2) }}</td>
+                    <td>{{ user.onhold_outflow|round(2) }}</td>
                     <td>{{ user.total|round(2)}}</td>
                     <td>{{ user.onhold|round(2) }}</td>
+                    <td>{{ user.total_preview|round(2) }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>

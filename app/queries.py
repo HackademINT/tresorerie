@@ -18,7 +18,7 @@ def get_stats(transactions):
     onhold_inflow = sum(transaction['sum'] for transaction in transactions if transaction['onhold'] and transaction['type'])
     onhold_outflow = sum(transaction['sum'] for transaction in transactions if transaction['onhold'] and not transaction['type'])
     onhold = onhold_inflow - onhold_outflow
-    return {'total': total, 'inflow': inflow, 'outflow': outflow, 'onhold': onhold, 'onhold_inflow': onhold_inflow, 'onhold_outflow': onhold_outflow}
+    return {'total': total, 'total_preview': total + onhold, 'inflow': inflow, 'outflow': outflow, 'onhold': onhold, 'onhold_inflow': onhold_inflow, 'onhold_outflow': onhold_outflow}
 
 
 # User functions
@@ -117,24 +117,20 @@ def modify_transaction(transaction):
 
 # Misc stat functions
 
-def get_total_inflow():
-    transactions = json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
-    return sum([transaction['sum'] for transaction in transactions if transaction['type'] and not transaction['onhold']])
-
-def get_total_outflow():
-    transactions = json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
-    return sum([transaction['sum'] for transaction in transactions if not transaction['type'] and not transaction['onhold']])
-
-def get_total_onhold():
-    transactions = json.loads(s.get(f'{API_URL}/transaction', headers=headers).text)
-    return sum([transaction['sum'] for transaction in transactions if transaction['onhold'] and transaction['type']])\
-            - sum([transaction['sum'] for transaction in transactions if transaction['onhold'] and not transaction['type']])
-
 def sort_users_by_onhold():
     return sorted(get_users(), key=lambda user: user['onhold'], reverse=True)
 
 def get_worst_user():
-    users = sort_users_by_onhold()
+    users = [user for user in sort_users_by_onhold() if user['onhold'] > 0]
+    if len(users) == 0:
+        return None
+    return users[0]
+
+def sort_users_by_total():
+    return sorted(get_users(), key=lambda user: user['total'], reverse=True)
+
+def get_best_user():
+    users = [user for user in sort_users_by_total() if user['total'] > 0]
     if len(users) == 0:
         return None
     return users[0]
