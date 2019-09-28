@@ -68,6 +68,22 @@ def admin():
                     flash('Transaction ajoutée avec succès', 'success')
                 else:
                     flash('Erreur lors de l\'ajout de la transaction', 'error')
+            elif action == 'addMultiple':
+                user_ids = request.form.getlist('userId')
+                eid = request.form['eventId']
+                count = 0
+                for uid in user_ids:
+                    t = {**transaction, **{"user_id": uid, "event_id": eid}}
+                    status = add_transaction(t)
+                    if status == 201:
+                        count += 1
+                    else:
+                        break
+                    if count != len(user_ids):
+                        flash(f'Erreur recontrée lors de l\'ajout des transactions: {count} transactions ajoutée(s) sur un total de {len(user_ids)}', 'error')
+                    else:
+                        flash(f'Un total de {count} transactions ont été ajoutées avec succès', 'success')
+
             elif action == 'modify':
                 transaction.update({"tid": request.form['tid']})
                 status = modify_transaction(transaction)

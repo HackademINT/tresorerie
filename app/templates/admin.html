@@ -30,10 +30,11 @@
 
           <!-- Button trigger modal -->
           {% include 'transaction-form.html' %}
-	      </br><button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addTransactionModal">
-
-		<i class="fas fa-plus"></i> Ajouter une transaction
-	      </button></br></br>
+          {% include 'add-multiple-transactions.html' %}
+          </br>
+          <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addTransactionModal"><i class="fas fa-plus"></i> Ajouter une transaction simple</button>
+          <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addMultipleTransactionModal"><i class="fas fa-plus"></i> Ajouter plusieurs transactions</button>
+          </br></br>
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
                 <thead>
