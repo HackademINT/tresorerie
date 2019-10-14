@@ -37,7 +37,7 @@
               <div class="card-header">Meilleur contributeur</div>
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-clipboard-check"></i>
+                  <i class="fas fa-fw fa-smile"></i>
                 </div>
                 <div class="mr-5">
                   {% if not best_user.fname %}
@@ -68,6 +68,29 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header"><i class="fas fa-calculator"></i> Egalisation</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for user in users %}
+                    {% if user.onhold > 0 %}
+                    <li class="list-group-item list-group-item-danger">
+                        <b>{{ user.fname }} {{ user.lname }}</b>: tu dois {{ user.onhold }}€ à HackademINT.
+                    </li>
+                    {% elif user.onhold == 0 %}
+                    <li class="list-group-item list-group-item-success">
+                        <b>{{ user.fname }} {{ user.lname }}</b>: tout est OK!
+                    </li>
+                    {% else %}
+                    <li class="list-group-item list-group-item-warning">
+                        <b>{{ user.fname }} {{ user.lname }}</b>: HackademINT te doit {{ user.onhold|abs }}€.
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
 
         <!-- Table des evenements -->

@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 class Config():
     SECRET_KEY = 'yoursecretkeyhere'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///yourdatabase.db'

@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
-certifi==2019.6.16        # via requests
+certifi==2019.9.11        # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via flask
 flask-caching==1.7.2
@@ -12,11 +12,11 @@ flask-simpleldap==1.4.0
 flask==1.1.1
 idna==2.8                 # via requests
 itsdangerous==1.1.0       # via flask
-jinja2==2.10.1            # via flask
+jinja2==2.10.3            # via flask
 markupsafe==1.1.1         # via jinja2
-pyasn1-modules==0.2.6     # via python-ldap
-pyasn1==0.4.6             # via pyasn1-modules, python-ldap
+pyasn1-modules==0.2.7     # via python-ldap
+pyasn1==0.4.7             # via pyasn1-modules, python-ldap
 python-ldap==3.2.0        # via flask-simpleldap
 requests==2.22.0
-urllib3==1.25.3           # via requests
-werkzeug==0.15.5          # via flask
+urllib3==1.25.6           # via requests
+werkzeug==0.16.0          # via flask
