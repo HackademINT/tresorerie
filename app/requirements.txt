@@ -18,5 +18,5 @@ pyasn1-modules==0.2.7     # via python-ldap
 pyasn1==0.4.7             # via pyasn1-modules, python-ldap
 python-ldap==3.2.0        # via flask-simpleldap
 requests==2.22.0
-urllib3==1.25.6           # via requests
+urllib3==1.25.8           # via requests
 werkzeug==0.16.0          # via flask
