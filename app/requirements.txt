@@ -16,7 +16,7 @@ jinja2==2.11.3            # via flask
 markupsafe==1.1.1         # via jinja2
 pyasn1-modules==0.2.7     # via python-ldap
 pyasn1==0.4.7             # via pyasn1-modules, python-ldap
-python-ldap==3.2.0        # via flask-simpleldap
+python-ldap==3.4.0        # via flask-simpleldap
 requests==2.22.0
 urllib3==1.26.5           # via requests
 werkzeug==0.16.0          # via flask
